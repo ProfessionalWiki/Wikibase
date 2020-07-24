@@ -50,6 +50,7 @@
 	"datatypes-type-wikibase-item": "Item",
 	"datatypes-type-wikibase-property": "Property",
 	"datatypes-type-commonsMedia": "Commons media file",
+	"datatypes-type-localMedia": "Media file",
 	"datatypes-type-geo-shape": "Geographic shape",
 	"datatypes-type-tabular-data": "Tabular data",
 	"datatypes-type-external-id": "External identifier",

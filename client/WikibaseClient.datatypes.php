@@ -79,6 +79,12 @@ return call_user_func( function() {
 				return $factory->newCommonsMediaFormatter( $format, $options );
 			},
 		],
+		'PT:localMedia' => [
+			'formatter-factory-callback' => function( $format, FormatterOptions $options ) {
+				$factory = WikibaseClient::getDefaultValueFormatterBuilders();
+				return $factory->newLocalMediaFormatter( $format, $options );
+			},
+		],
 		'PT:geo-shape' => [
 			'formatter-factory-callback' => function( $format, FormatterOptions $options ) {
 				$factory = WikibaseClient::getDefaultValueFormatterBuilders();

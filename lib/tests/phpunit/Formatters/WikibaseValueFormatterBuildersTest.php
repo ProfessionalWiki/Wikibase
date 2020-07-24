@@ -339,7 +339,7 @@ class WikibaseValueFormatterBuildersTest extends MediaWikiIntegrationTestCase {
 				SnakFormatter::FORMAT_HTML,
 				$this->newFormatterOptions(),
 				new StringValue( 'Example.jpg' ),
-				'@^<a class="extiw" href="//commons\.wikimedia\.org/wiki/File:Example\.jpg">Example\.jpg</a>$@',
+				'@^<a class="extiw" href="https://commons\.wikimedia\.org/wiki/File:Example\.jpg">Example\.jpg</a>$@',
 			],
 			'html commons inline image' => [
 				'CommonsMedia',

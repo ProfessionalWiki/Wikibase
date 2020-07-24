@@ -15,6 +15,7 @@
 	 * @param {util.MessageProvider} messageProvider
 	 * @param {util.ContentLanguages} contentLanguages
 	 * @param {string|null} [vocabularyLookupApiUrl=null]
+	 * @param {string} repoIndexPhpUrl
 	 * @param {string} commonsApiUrl
 	 */
 	var SELF = function WbValueViewBuilder(
@@ -25,6 +26,7 @@
 		messageProvider,
 		contentLanguages,
 		vocabularyLookupApiUrl,
+		repoIndexPhpUrl,
 		commonsApiUrl
 	) {
 		this._baseOptions = {
@@ -34,6 +36,7 @@
 			messageProvider: messageProvider,
 			contentLanguages: contentLanguages,
 			vocabularyLookupApiUrl: vocabularyLookupApiUrl || null,
+			repoIndexPhpUrl: repoIndexPhpUrl,
 			commonsApiUrl: commonsApiUrl
 		};
 		this._formatterFactory = formatterFactory;

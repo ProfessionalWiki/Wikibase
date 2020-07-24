@@ -17,6 +17,7 @@
 
 return [
 	'PT:commonsMedia'      => [ 'value-type' => 'string' ],
+	'PT:localMedia'        => [ 'value-type' => 'string' ],
 	'PT:geo-shape'         => [ 'value-type' => 'string' ],
 	'PT:globe-coordinate'  => [ 'value-type' => 'globecoordinate' ],
 	'PT:monolingualtext'   => [ 'value-type' => 'monolingualtext' ],

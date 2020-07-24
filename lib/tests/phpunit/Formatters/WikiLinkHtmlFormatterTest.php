@@ -6,7 +6,6 @@ use DataValues\NumberValue;
 use DataValues\StringValue;
 use InvalidArgumentException;
 use MediaWikiCoversValidator;
-use Wikibase\Lib\Formatters\CommonsLinkFormatter;
 use Wikibase\Lib\Formatters\WikiLinkHtmlFormatter;
 
 /**
@@ -55,7 +54,7 @@ class WikiLinkHtmlFormatterTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testFormatError() {
-		$formatter = new CommonsLinkFormatter();
+		$formatter = new WikiLinkHtmlFormatter( 1 );
 		$value = new NumberValue( 23 );
 
 		$this->expectException( InvalidArgumentException::class );

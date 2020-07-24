@@ -81,6 +81,7 @@
 	 *        Required for showing the user interface in the correct language and for showing terms
 	 *        in all languages requested by the user.
 	 * @param {string|null} [vocabularyLookupApiUrl=null]
+	 * @param {string} repoIndexPhpUrl
 	 * @param {string} commonsApiUrl
 	 */
 	var SELF = MODULE.ViewFactory = function ViewFactory(
@@ -96,6 +97,7 @@
 		parserStore,
 		userLanguages,
 		vocabularyLookupApiUrl,
+		repoIndexPhpUrl,
 		commonsApiUrl
 	) {
 		if ( ( !structureEditorFactory || !structureEditorFactory.getAdder )
@@ -121,6 +123,7 @@
 		this._vocabularyLookupApiUrl = vocabularyLookupApiUrl || null;
 		this._eventSingletonManager = new EventSingletonManager();
 		this._commonsApiUrl = commonsApiUrl;
+		this._repoIndexPhpUrl = repoIndexPhpUrl;
 		this._propertyDataTypeStore = propertyDataTypeStore;
 	};
 
@@ -690,6 +693,7 @@
 			this._messageProvider,
 			this._contentLanguages,
 			this._vocabularyLookupApiUrl,
+			this._repoIndexPhpUrl,
 			this._commonsApiUrl
 		);
 	};

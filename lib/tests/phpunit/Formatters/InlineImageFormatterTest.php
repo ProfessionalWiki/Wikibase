@@ -8,12 +8,12 @@ use InvalidArgumentException;
 use MediaWiki\MediaWikiServices;
 use MediaWikiIntegrationTestCase;
 use ParserOptions;
-use ValueFormatters\FormatterOptions;
-use ValueFormatters\ValueFormatter;
-use Wikibase\Lib\Formatters\CommonsInlineImageFormatter;
+use Wikibase\Lib\Formatters\CommonsImageLinker;
+use Wikibase\Lib\Formatters\InlineImageFormatter;
+use Wikibase\Lib\Formatters\LocalImageLinker;
 
 /**
- * @covers \Wikibase\Lib\Formatters\CommonsInlineImageFormatter
+ * @covers \Wikibase\Lib\Formatters\InlineImageFormatter
  *
  * @group ValueFormatters
  * @group DataValueExtensions
@@ -24,7 +24,7 @@ use Wikibase\Lib\Formatters\CommonsInlineImageFormatter;
  * @author Adrian Heine <adrian.heine@wikimedia.de>
  * @author Marius Hoch
  */
-class CommonsInlineImageFormatterTest extends MediaWikiIntegrationTestCase {
+class InlineImageFormatterTest extends MediaWikiIntegrationTestCase {
 
 	public function commonsInlineImageFormatterProvider() {
 		$fileUrl = '.*//upload\.wikimedia\.org/wikipedia/commons/.*/120px-Example\.jpg';
@@ -69,7 +69,7 @@ class CommonsInlineImageFormatterTest extends MediaWikiIntegrationTestCase {
 			$this->markTestSkipped( '"Example.jpg" not found? Instant commons disabled?' );
 		}
 
-		$formatter = $this->newSubjectInstance();
+		$formatter = $this->newFormatter();
 
 		$html = $formatter->format( $value );
 		if ( $shouldContain ) {
@@ -80,7 +80,7 @@ class CommonsInlineImageFormatterTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testFormatError() {
-		$formatter = $this->newSubjectInstance();
+		$formatter = $this->newFormatter();
 		$value = new NumberValue( 23 );
 
 		$this->expectException( InvalidArgumentException::class );
@@ -88,17 +88,18 @@ class CommonsInlineImageFormatterTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testFormat_whenThumbsizeNotAvailable_usesFallback() {
-		$formatter = $this->newSubjectInstance( 1, [ 0 => 120 ] );
+		$formatter = $this->newFormatter( 1, [ 0 => 120 ] );
 		$html = $formatter->format( new StringValue( 'example.jpg' ) );
 
 		// fallback to using CommonsInLineImageFormatter::FALLBACK_THUMBNAIL_WIDTH
 		$this->assertRegExp( '/320px-Example\.jpg/', $html );
 	}
 
-	private function newSubjectInstance(
+	private function newFormatter(
 		$thumbSize = 0,
-		$thumbLimits = [ 120 ]
-	): CommonsInlineImageFormatter {
+		$thumbLimits = [ 120 ],
+		$captionCssClass = 'commons-media-caption'
+	): InlineImageFormatter {
 		if ( !MediaWikiServices::getInstance()->getRepoGroup()->findFile( 'Example.jpg' ) ) {
 			$this->markTestSkipped( '"Example.jpg" not found? Instant commons disabled?' );
 		}
@@ -106,19 +107,35 @@ class CommonsInlineImageFormatterTest extends MediaWikiIntegrationTestCase {
 		$parserOptions = ParserOptions::newFromAnon();
 		$parserOptions->setThumbSize( $thumbSize );
 
-		return new CommonsInlineImageFormatter(
+		return new InlineImageFormatter(
 			$parserOptions,
 			$thumbLimits,
-			$this->newFormatterOptions()
+			'en',
+			new CommonsImageLinker(),
+			$captionCssClass
 		);
 	}
 
-	private function newFormatterOptions() {
-		$options = [
-			ValueFormatter::OPT_LANG => 'en'
-		];
+	public function testCaptionCssClass() {
+		$formatter = $this->newFormatterWithCaptionCssClass( 'fluffy-kittens' );
 
-		return new FormatterOptions( $options );
+		$this->assertStringContainsString(
+			'class="fluffy-kittens"',
+			$formatter->format( new StringValue( 'Whatever.jpg' ) )
+		);
+	}
+
+	private function newFormatterWithCaptionCssClass( string $class ): InlineImageFormatter {
+		$parserOptions = ParserOptions::newFromAnon();
+		$parserOptions->setThumbSize( 0 );
+
+		return new InlineImageFormatter(
+			$parserOptions,
+			[ 120 ],
+			'en',
+			new LocalImageLinker(),
+			$class
+		);
 	}
 
 }

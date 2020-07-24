@@ -61,6 +61,7 @@
 			viewFactoryArguments, ViewFactoryFactory, viewFactory, entityView,
 			repoConfig = mw.config.get( 'wbRepo' ),
 			repoApiUrl = repoConfig.url + repoConfig.scriptPath + '/api.php',
+			repoIndexPhpUrl = repoConfig.url + repoConfig.scriptPath + '/index.php',
 			mwApi = wb.api.getLocationAgnosticMwApi( repoApiUrl ),
 			repoApi = new wb.api.RepoApi( mwApi, mw.config.get( 'wgUserLanguage' ) ),
 			userLanguages = wb.getUserLanguages(),
@@ -126,6 +127,7 @@
 			parserStore,
 			userLanguages,
 			repoApiUrl,
+			repoIndexPhpUrl,
 			config.geoShapeStorageApiEndpoint
 		];
 		var hookResults = [];

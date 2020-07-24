@@ -114,6 +114,17 @@ return call_user_func( function() {
 				return PropertyRdfBuilder::OBJECT_PROPERTY;
 			},
 		],
+		'PT:localMedia' => [
+			'expert-module' => 'jquery.valueview.experts.LocalMediaType',
+			'validator-factory-callback' => function() {
+				$factory = WikibaseRepo::getDefaultValidatorBuilders();
+				return $factory->buildMediaValidators( 'doNotCheckExistence' );
+			},
+			'formatter-factory-callback' => function( $format, FormatterOptions $options ) {
+				$factory = WikibaseRepo::getDefaultValueFormatterBuilders();
+				return $factory->newLocalMediaFormatter( $format, $options );
+			},
+		],
 		'PT:geo-shape' => [
 			'expert-module' => 'jquery.valueview.experts.GeoShape',
 			'validator-factory-callback' => function() {

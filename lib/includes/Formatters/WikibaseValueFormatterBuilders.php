@@ -10,6 +10,7 @@ use Psr\SimpleCache\CacheInterface;
 use RequestContext;
 use ValueFormatters\DecimalFormatter;
 use ValueFormatters\FormatterOptions;
+use ValueFormatters\FormattingException;
 use ValueFormatters\QuantityFormatter;
 use ValueFormatters\QuantityHtmlFormatter;
 use ValueFormatters\StringFormatter;
@@ -391,16 +392,39 @@ class WikibaseValueFormatterBuilders {
 	 */
 	public function newCommonsMediaFormatter( $format, FormatterOptions $options ) {
 		if ( $this->snakFormat->isPossibleFormat( SnakFormatter::FORMAT_HTML_VERBOSE, $format ) ) {
-			return new CommonsInlineImageFormatter(
+			return new InlineImageFormatter(
 				RequestContext::getMain()->getOutput()->parserOptions(),
 				$this->thumbLimits,
-				$options
+				$options->getOption( ValueFormatter::OPT_LANG ),
+				new CommonsImageLinker(),
+				'commons-media-caption'
 			);
 		}
 
 		switch ( $this->snakFormat->getBaseFormat( $format ) ) {
 			case SnakFormatter::FORMAT_HTML:
-				return new CommonsLinkFormatter( $options );
+				return new ImageLinkFormatter( new CommonsImageLinker(), 'extiw' );
+			case SnakFormatter::FORMAT_WIKI:
+				return new CommonsThumbnailFormatter();
+			default:
+				return $this->newStringFormatter( $format, $options );
+		}
+	}
+
+	public function newLocalMediaFormatter( string $format, FormatterOptions $options ): ValueFormatter {
+		if ( $this->snakFormat->isPossibleFormat( SnakFormatter::FORMAT_HTML_VERBOSE, $format ) ) {
+			return new InlineImageFormatter(
+				RequestContext::getMain()->getOutput()->parserOptions(),
+				$this->thumbLimits,
+				$options->getOption( ValueFormatter::OPT_LANG ),
+				new LocalImageLinker(),
+				'commons-media-caption'
+			);
+		}
+
+		switch ( $this->snakFormat->getBaseFormat( $format ) ) {
+			case SnakFormatter::FORMAT_HTML:
+				return new ImageLinkFormatter( new LocalImageLinker(), '' );
 			case SnakFormatter::FORMAT_WIKI:
 				return new CommonsThumbnailFormatter();
 			default:

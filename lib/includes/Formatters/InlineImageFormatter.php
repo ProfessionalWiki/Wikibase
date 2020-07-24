@@ -12,9 +12,7 @@ use MediaWiki\MediaWikiServices;
 use ParserOptions;
 use RepoGroup;
 use Title;
-use ValueFormatters\FormatterOptions;
 use ValueFormatters\ValueFormatter;
-use ValueFormatters\ValueFormatterBase;
 
 /**
  * Formats the StringValue from a "commonsMedia" snak as a HTML thumbnail and a link to commons.
@@ -23,7 +21,7 @@ use ValueFormatters\ValueFormatterBase;
  * @author Adrian Heine
  * @author Marius Hoch
  */
-class CommonsInlineImageFormatter extends ValueFormatterBase {
+class InlineImageFormatter implements ValueFormatter {
 
 	const FALLBACK_THUMBNAIL_WIDTH = 320; // 320 the was default hardcoded value. Removed in T224189
 
@@ -48,25 +46,38 @@ class CommonsInlineImageFormatter extends ValueFormatterBase {
 	private $thumbLimits;
 
 	/**
+	 * @var ImageLinker
+	 */
+	private $imageLinker;
+
+	/**
+	 * @var string
+	 */
+	private $captionCssClass;
+
+	/**
 	 * @param ParserOptions $parserOptions Options for thumbnail size
 	 * @param array $thumbLimits Mapping of thumb number to the limit like [ 0 => 120, 1 => 240, ...]
-	 * @param FormatterOptions|null $options
+	 * @param string $languageCode
+	 * @param ImageLinker $imageLinker
+	 * @param string $captionCssClass
 	 * @param RepoGroup|null $repoGroup
 	 * @throws \MWException
 	 */
 	public function __construct(
 		ParserOptions $parserOptions,
 		array $thumbLimits,
-		FormatterOptions $options = null,
+		string $languageCode,
+		ImageLinker $imageLinker,
+		string $captionCssClass,
 		RepoGroup $repoGroup = null
 	) {
-		parent::__construct( $options );
-
-		$languageCode = $this->getOption( ValueFormatter::OPT_LANG );
 		$this->language = Language::factory( $languageCode );
 		$this->repoGroup = $repoGroup ?: MediaWikiServices::getInstance()->getRepoGroup();
 		$this->parserOptions = $parserOptions;
 		$this->thumbLimits = $thumbLimits;
+		$this->imageLinker = $imageLinker;
+		$this->captionCssClass = $captionCssClass;
 	}
 
 	/**
@@ -122,7 +133,7 @@ class CommonsInlineImageFormatter extends ValueFormatterBase {
 	private function wrapThumb( Title $title, $thumbHtml ) {
 		$attributes = [
 			'class' => 'image',
-			'href' => 'https://commons.wikimedia.org/wiki/File:' . $title->getPartialURL()
+			'href' => $this->imageLinker->buildUrl( $title )
 		];
 
 		return Html::rawElement(
@@ -139,7 +150,7 @@ class CommonsInlineImageFormatter extends ValueFormatterBase {
 	 */
 	private function getCaptionHtml( Title $title, $file = null ) {
 		$attributes = [
-			'href' => 'https://commons.wikimedia.org/wiki/File:' . $title->getPartialURL()
+			'href' => $this->imageLinker->buildUrl( $title )
 		];
 		$innerHtml = Html::element( 'a', $attributes, $title->getText() );
 
@@ -149,7 +160,7 @@ class CommonsInlineImageFormatter extends ValueFormatterBase {
 
 		return Html::rawElement(
 			'div',
-			[ 'class' => 'commons-media-caption' ],
+			[ 'class' => $this->captionCssClass ],
 			$innerHtml
 		);
 	}

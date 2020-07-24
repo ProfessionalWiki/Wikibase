@@ -422,6 +422,20 @@ return call_user_func( function() {
 			],
 		],
 
+		'jquery.ui.mediasuggester' => $wikibaseDatavaluesValueviewLibPaths + [
+				'scripts' => [
+					'jquery.ui/jquery.ui.mediasuggester.js',
+				],
+				'styles' => [
+					'jquery.ui/jquery.ui.mediasuggester.css',
+				],
+				'dependencies' => [
+					'jquery.ui.suggester',
+					'jquery.ui',
+					'util.highlightSubstring',
+				],
+			],
+
 		'jquery.ui.languagesuggester' => $wikibaseDatavaluesValueviewLibPaths + [
 			'scripts' => [
 				'jquery.ui/jquery.ui.languagesuggester.js',
@@ -689,6 +703,18 @@ return call_user_func( function() {
 				'jquery.valueview.Expert',
 			],
 		],
+
+		'jquery.valueview.experts.LocalMediaType' => $wikibaseDatavaluesValueviewSrcPaths + [
+				'scripts' => [
+					'experts/LocalMediaType.js',
+				],
+				'dependencies' => [
+					'jquery.event.special.eachchange',
+					'jquery.ui.mediasuggester',
+					'jquery.valueview.experts.StringValue',
+					'jquery.valueview.Expert',
+				],
+			],
 
 		'jquery.valueview.experts.GeoShape' => $wikibaseDatavaluesValueviewSrcPaths + [
 			'scripts' => [

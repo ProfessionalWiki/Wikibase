@@ -63,6 +63,7 @@
 	"datatypes-type-wikibase-item": "The name of a data type for items in Wikibase.\n{{related|Datatypes-type}}\n{{Identical|Item}}",
 	"datatypes-type-wikibase-property": "The name of a data type for properties in Wikibase.\n{{related|Datatypes-type}}\n{{Identical|Property}}",
 	"datatypes-type-commonsMedia": "The name of a data type for media files on Wikimedia Commons (proper name, capitalised in English; first letter capitalised anyway in this message and relatives).\n\n{{related|Datatypes-type}}",
+	"datatypes-type-localMedia": "The name of a data type for media files on the local wiki (proper name, capitalised in English; first letter capitalised anyway in this message and relatives).\n\n{{related|Datatypes-type}}",
 	"datatypes-type-geo-shape": "The name of a data type for geo-shapes\n{{related|Datatypes-type}}",
 	"datatypes-type-tabular-data": "The name of a data type for tabular-data\n{{related|Datatypes-type}}\n{{Identical|Tabular data}}",
 	"datatypes-type-external-id": "The name of a data type for external identifiers in Wikibase.\n{{related|Datatypes-type}}",

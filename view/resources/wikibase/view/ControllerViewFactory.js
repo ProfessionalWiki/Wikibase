@@ -21,6 +21,7 @@ wikibase.view.ControllerViewFactory = ( function ( wb ) {
 			parserStore,
 			userLanguages,
 			vocabularyLookupApiUrl,
+			repoIndexPhpUrl,
 			commonsApiUrl
 		) {
 			this._toolbarFactory = toolbarFactory;
@@ -40,6 +41,7 @@ wikibase.view.ControllerViewFactory = ( function ( wb ) {
 					parserStore,
 					userLanguages,
 					vocabularyLookupApiUrl,
+					repoIndexPhpUrl,
 					commonsApiUrl
 				]
 			);

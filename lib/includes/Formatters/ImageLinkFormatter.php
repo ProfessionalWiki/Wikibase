@@ -10,29 +10,22 @@ use ValueFormatters\FormatterOptions;
 use ValueFormatters\ValueFormatter;
 
 /**
- * Formats the StringValue from a "commonsMedia" snak as an HTML link pointing to the file
- * description page on Wikimedia Commons.
+ * Formats the StringValue from "localMedia" and "commonsMedia" snaks as an HTML link
+ * pointing to the file description page on the local wiki or Wikimedia Commons.
  *
  * @todo Use MediaWiki renderer
  *
  * @license GPL-2.0-or-later
  * @author Adrian Heine <adrian.heine@wikimedia.de>
  */
-class CommonsLinkFormatter implements ValueFormatter {
+class ImageLinkFormatter implements ValueFormatter {
 
-	/**
-	 * @var array HTML attributes to use on the generated <a> tags.
-	 */
-	private $attributes;
+	private $imageLinker;
+	private $cssClass;
 
-	/**
-	 * @param FormatterOptions|null $options
-	 */
-	public function __construct( FormatterOptions $options = null ) {
-		// @todo configure from options
-		$this->attributes = [
-			'class' => 'extiw'
-		];
+	public function __construct( ImageLinker $imageLinker, string $cssClass ) {
+		$this->imageLinker = $imageLinker;
+		$this->cssClass = $cssClass;
 	}
 
 	/**
@@ -58,12 +51,14 @@ class CommonsLinkFormatter implements ValueFormatter {
 			return htmlspecialchars( $fileName );
 		}
 
-		$attributes = array_merge( $this->attributes, [
-			'href' => '//commons.wikimedia.org/wiki/File:' . $title->getPartialURL()
-		] );
-		$html = Html::element( 'a', $attributes, $fileName );
-
-		return $html;
+		return Html::element(
+			'a',
+			[
+				'class' => $this->cssClass,
+				'href' => $this->imageLinker->buildUrl( $title )
+			],
+			$fileName
+		);
 	}
 
 }
