@@ -28,6 +28,7 @@ use DataValues\Geo\Parsers\GlobeCoordinateParser;
 use DataValues\StringValue;
 use DataValues\UnboundedQuantityValue;
 use MediaWiki\Logger\LoggerFactory;
+use MediaWiki\MediaWikiServices;
 use ValueFormatters\FormatterOptions;
 use ValueParsers\ParserOptions;
 use ValueParsers\QuantityParser;
@@ -57,6 +58,7 @@ use Wikibase\Repo\Rdf\Values\ExternalIdentifierRdfBuilder;
 use Wikibase\Repo\Rdf\Values\GeoShapeRdfBuilder;
 use Wikibase\Repo\Rdf\Values\GlobeCoordinateRdfBuilder;
 use Wikibase\Repo\Rdf\Values\LiteralValueRdfBuilder;
+use Wikibase\Repo\Rdf\Values\LocalMediaRdfBuilder;
 use Wikibase\Repo\Rdf\Values\MonolingualTextRdfBuilder;
 use Wikibase\Repo\Rdf\Values\ObjectUriRdfBuilder;
 use Wikibase\Repo\Rdf\Values\QuantityRdfBuilder;
@@ -123,6 +125,12 @@ return call_user_func( function() {
 			'formatter-factory-callback' => function( $format, FormatterOptions $options ) {
 				$factory = WikibaseRepo::getDefaultValueFormatterBuilders();
 				return $factory->newLocalMediaFormatter( $format, $options );
+			},
+			'rdf-builder-factory-callback' => function () {
+				return new LocalMediaRdfBuilder( MediaWikiServices::getInstance()->getTitleFactory() );
+			},
+			'rdf-data-type' => function() {
+				return PropertyRdfBuilder::OBJECT_PROPERTY;
 			},
 		],
 		'PT:geo-shape' => [
