@@ -59,7 +59,7 @@ class StatsdRecordingSimpleCache implements CacheInterface {
 		$this->stats->updateCount( $this->statsKeys['hit'], $count );
 	}
 
-	public function get( $key, $default = null ) {
+	public function get( $key, $default = null ): mixed {
 		$value = $this->inner->get( $key, self::DEFAULT_VALUE );
 		if ( $value === self::DEFAULT_VALUE ) {
 			$this->recordMisses( 1 );
@@ -70,19 +70,19 @@ class StatsdRecordingSimpleCache implements CacheInterface {
 		return $value;
 	}
 
-	public function set( $key, $value, $ttl = null ) {
+	public function set( $key, $value, $ttl = null ): bool {
 		return $this->inner->set( $key, $value, $ttl );
 	}
 
-	public function delete( $key ) {
+	public function delete( $key ): bool {
 		return $this->inner->delete( $key );
 	}
 
-	public function clear() {
+	public function clear(): bool {
 		return $this->inner->clear();
 	}
 
-	public function getMultiple( $keys, $default = null ) {
+	public function getMultiple( $keys, $default = null ): iterable {
 		$values = $this->inner->getMultiple( $keys, self::DEFAULT_VALUE );
 		$misses = 0;
 		$hits = 0;
@@ -108,15 +108,15 @@ class StatsdRecordingSimpleCache implements CacheInterface {
 		return $values;
 	}
 
-	public function setMultiple( $values, $ttl = null ) {
+	public function setMultiple( $values, $ttl = null ): bool {
 		return $this->inner->setMultiple( $values, $ttl );
 	}
 
-	public function deleteMultiple( $keys ) {
+	public function deleteMultiple( $keys ): bool {
 		return $this->inner->deleteMultiple( $keys );
 	}
 
-	public function has( $key ) {
+	public function has( $key ): bool {
 		return $this->inner->has( $key );
 	}
 
